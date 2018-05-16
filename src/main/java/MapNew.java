@@ -30,7 +30,7 @@ import org.apache.orc.*;
 import org.apache.orc.mapred.OrcList;
 import org.apache.orc.mapred.OrcStruct;
 
-public class MapeNew extends Mapper<NullWritable, OrcStruct, NullWritable, OrcStruct>
+public class MapNew extends Mapper<NullWritable, OrcStruct, NullWritable, OrcStruct>
 {
   private TypeDescription schema =
       TypeDescription.fromString("struct<values:string>");
