@@ -19,18 +19,17 @@ import org.apache.orc.TypeDescription;
 import org.apache.orc.mapred.OrcList;
 import org.apache.orc.mapred.OrcStruct;
 
-public class Reduce extends org.apache.hadoop.mapreduce.Reducer implements Reducer<Text,OrcStruct,NullWritable,OrcStruct>
+public class Reduce extends org.apache.hadoop.mapreduce.Reducer implements Reducer<Text,OrcStruct,Text,OrcStruct>
 {
 
   private TypeDescription schema =
-      TypeDescription.fromString("struct<key:string,values:string");
+      TypeDescription.fromString("struct<key:string,values:string>");
   private OrcStruct pair = (OrcStruct) OrcStruct.createValue(schema);
   private List<OrcStruct> value =new ArrayList<>();
-  private final NullWritable nada = NullWritable.get();
   private String values = null;
 
 
-  public void reduce(Text key, Iterator<OrcStruct> iterator, OutputCollector<NullWritable, OrcStruct> output,
+  public void reduce(Text key, Iterator<OrcStruct> iterator, OutputCollector<Text, OrcStruct> output,
                      Reporter reporter) throws IOException
   {
     while (iterator.hasNext()) {
@@ -38,7 +37,7 @@ public class Reduce extends org.apache.hadoop.mapreduce.Reducer implements Reduc
     }
     pair.setFieldValue(0, key);
     pair.setFieldValue(1, (Text) value);
-    output.collect(nada, pair);
+    output.collect(key, pair);
   }
 
   @Override
