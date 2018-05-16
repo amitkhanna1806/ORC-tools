@@ -35,37 +35,21 @@ public class ORCDriver extends Configured implements Tool {
     conf.set("mapreduce.job.outputformat.class", "org.apache.orc.mapreduce.OrcOutputFormat");
     conf.set("mapreduce.input.fileinputformat.inputdir", arg0[0]);
     conf.set("mapreduce.output.fileinputformat.outputdir", arg0[1]);
-    conf.set("mapreduce.job.queuename", "reports");
     conf.set("mapreduce.map.tasks", "25");
-//    conf.set("yarn.resourcemanager.address", "localhost:8050");
-//    conf.set("mapreduce.framework.name", "yarn");
-//    conf.set("fs.default.name", "hdfs://pyrite:9000");
-//    conf.set("orc.mapred.map.output.key.schema","org.apache.hadoop.io.Text");
     conf.set("orc.mapred.output.schema","struct<values:string>");
 
-    //Job job = new Job(conf,"Read ORC Files");
     Job job = Job.getInstance(conf,"Read ORC Files");
     job.setJarByClass(ORCDriver.class);
-    job.setMapperClass(MapeNew.class);
-//    job.setReducerClass(Reduce.class);
-
-    //job.setInputFormatClass(OrcInputFormat.class);
+    job.setMapperClass(MapNew.class);
 
     job.setMapOutputKeyClass(NullWritable.class);
     job.setMapOutputValueClass(OrcStruct.class);
     job.setOutputKeyClass(NullWritable.class);
     job.setOutputValueClass(OrcStruct.class);
 
-
-    //job.setOutputKeyClass(NullWritable.class);
-    //job.setOutputValueClass(Text.class);
-
-//    job.setOutputFormatClass(TextOutputFormat.class);
-      job.setOutputFormatClass(OrcOutputFormat.class);
+    job.setOutputFormatClass(OrcOutputFormat.class);
     Path path =new Path(arg0[0]);
     MultipleInputs.addInputPath(job, path, OrcInputFormat.class);
-//    FileInputFormat.addInputPath(job, new Path(arg0[0]));
-//    FileInputFormat.setInputDirRecursive(job, true);
 
     FileOutputFormat.setOutputPath(job, new Path(arg0[1]));
     job.setNumReduceTasks(0);
