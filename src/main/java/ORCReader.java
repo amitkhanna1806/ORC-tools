@@ -103,6 +103,7 @@ public class ORCReader {
     }
   }
   public static void main(String[] args) throws Exception {
+    //arg-> input file, column for where clause, column value.
     new ORCReader(args);
   }
 }
